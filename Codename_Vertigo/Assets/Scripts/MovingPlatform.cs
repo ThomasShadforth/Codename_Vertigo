@@ -11,6 +11,9 @@ public class MovingPlatform : MonoBehaviour
     public float waitTime = 1f;
     bool waiting;
 
+    GameObject target;
+    public Vector3 offset;
+
     void Start()
     {
         startPosition = transform.position;
@@ -24,18 +27,26 @@ public class MovingPlatform : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!waiting)
+        if (waiting)
         {
-            transform.position += (Vector3)moveVelocity * Time.deltaTime;
-
-            float distanceTravelled = Vector2.Distance(startPosition, transform.position);
-
-            if(distanceTravelled >= distanceLimit)
-            {
-                StartCoroutine(Wait());
-            }
-
+            return;
         }
+
+        transform.position += (Vector3)moveVelocity * Time.deltaTime;
+
+        float distanceTravelled = Vector2.Distance(startPosition, transform.position);
+
+        if(distanceTravelled >= distanceLimit)
+        {
+            StartCoroutine(Wait());
+        }
+
+        if(target != null)
+        {
+            offset = target.transform.position - transform.position;
+            target.GetComponent<Rigidbody2D>().position = new Vector2(transform.position.x + offset.x, target.transform.position.y);
+        }
+
     }
 
     IEnumerator Wait()
@@ -47,4 +58,26 @@ public class MovingPlatform : MonoBehaviour
         moveVelocity *= -1;
 
     }
+
+
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.GetComponent<PlayerController>())
+        {
+            Debug.Log("AAAAAAAAAAA");
+            target = other.gameObject;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.GetComponent<PlayerController>())
+        {
+            Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            target = null;
+        }
+    }
+
+
 }

@@ -83,6 +83,7 @@ public class SpearThrow : MonoBehaviour
                     //Set the position of the dot based on the distance between each on (The distance is multiplied by the index to space it out further
                     throwingArcDots[i].transform.position = PointPosition(i * distanceBetweenDots);
 
+                    /*
                     if(Physics2D.OverlapCircle(throwingArcDots[i].transform.position, .5f))
                     {
                         for(int j = i; j < numberOfDots; j++)
@@ -90,7 +91,7 @@ public class SpearThrow : MonoBehaviour
                             throwingArcDots[j].gameObject.SetActive(false);
                         }
                         Debug.Log("DETECTING COLLIDER AT: " + throwingArcDots[i].name + i);
-                    }
+                    }*/
 
                 }
             }
@@ -131,9 +132,14 @@ public class SpearThrow : MonoBehaviour
 
     void TriggerRetrieveSpear()
     {
+        
         SpearNorm spear = FindObjectOfType<SpearNorm>();
-        spear.ReturnSpear();
-        spearThrown = false;
+
+        if (!spear.isPickup)
+        {
+            spear.ReturnSpear();
+            spearThrown = false;
+        }
     }
 
     Vector2 PointPosition(float t)
@@ -153,6 +159,6 @@ public class SpearThrow : MonoBehaviour
             Destroy(other.gameObject);
             spearThrown = false;
         }
-        Debug.Log("TRIGGERED!!!");
+        
     }
 }

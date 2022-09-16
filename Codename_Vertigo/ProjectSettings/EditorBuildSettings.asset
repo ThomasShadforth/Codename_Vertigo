@@ -5,7 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Menus/Main_Menu.unity
+    guid: b45fabed58205c842b7739310915f92b
+  - enabled: 1
+    path: Assets/Scenes/Levels/Tutorials/Tutorial Pt. 1.unity
+    guid: 16682bac64f1e154b821059d512f51c8
+  - enabled: 1
+    path: Assets/Scenes/Levels/Tutorials/Tutorial Pt. 2.unity
+    guid: ac14eb6e58bd80648a8396af56277441
   m_configObjects: {}

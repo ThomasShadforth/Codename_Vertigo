@@ -46,7 +46,7 @@ public class EnemyAIBase : CustomPhysics, IDamageInterface
         targetPlayer = FindObjectOfType<PlayerController>().gameObject.transform;
         enemyHP = enemyMaxHP;
 
-        Debug.Log(patrolPoints[currentPatrolIndex].name);
+        
     }
 
     // Update is called once per frame
@@ -169,6 +169,7 @@ public class EnemyAIBase : CustomPhysics, IDamageInterface
     {
         if(enemyHP <= 0)
         {
+            FindObjectOfType<HitStopController>().StopTime(.1f);
             Destroy(gameObject);
         }
     }

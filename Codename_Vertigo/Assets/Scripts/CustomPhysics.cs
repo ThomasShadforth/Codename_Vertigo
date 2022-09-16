@@ -29,7 +29,10 @@ public class CustomPhysics : MonoBehaviour
     protected const float minMoveDistance = 0.0002f;
     protected const float shellRadius = 0.008f;
 
-    
+    public bool onPlatform;
+    public Vector2 platformPos;
+
+    [SerializeField] protected bool isDying;
 
     private void OnEnable()
     {
@@ -47,6 +50,11 @@ public class CustomPhysics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isDying)
+        {
+            return;
+        }
+
         targetVelocity = Vector2.zero;
         ComputeVelocity();
     }
@@ -58,6 +66,10 @@ public class CustomPhysics : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDying)
+        {
+            return;
+        }
         velocity += gravityModifier * Physics2D.gravity * Time.deltaTime;
         velocity.x = targetVelocity.x;
 
@@ -83,6 +95,7 @@ public class CustomPhysics : MonoBehaviour
 
     void Movement(Vector2 move, bool yMovement)
     {
+        
         float distance = move.magnitude;
         
 
@@ -105,17 +118,17 @@ public class CustomPhysics : MonoBehaviour
 
             for (int i = 0; i < hitBufferList.Count; i++)
             {
+                
 
                 
 
                 //Check the normal of the objects to determine the angle of the collision
                 Vector2 currentNormal = hitBufferList[i].normal;
-
-                
+                //Debug.Log(currentNormal);
 
                 if (currentNormal.x == 1 || currentNormal.x == -1)
                 {
-                    Debug.Log(currentNormal.x);
+                    
                     collideWall = true;
 
                 }
@@ -142,15 +155,20 @@ public class CustomPhysics : MonoBehaviour
                     velocity = velocity - projection * currentNormal;
                 }
 
+                
+
                 float modifiedDistance = hitBufferList[i].distance - shellRadius;
                 distance = modifiedDistance < distance ? modifiedDistance : distance;
             }
 
         }
         
-
         rb2d.position = rb2d.position + move.normalized * distance;
-
         
+    }
+
+    public virtual void SetDying()
+    {
+        isDying = true;
     }
 }

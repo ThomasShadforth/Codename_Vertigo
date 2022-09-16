@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class PlayerController : CustomPhysics
+public class PlayerController : CustomPhysics, IDataPersistence
 {
     public float maxSpeed = 7f;
     public float jumpHeight = 7f;
@@ -23,6 +24,7 @@ public class PlayerController : CustomPhysics
     public LayerMask wallJumpLayer;
 
     public bool facingRight;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +36,10 @@ public class PlayerController : CustomPhysics
     // Update is called once per frame
     protected override void ComputeVelocity()
     {
-        
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            GameManager.instance.RestartScene();
+        }
 
         if (!isDashing)
         {
@@ -139,7 +144,7 @@ public class PlayerController : CustomPhysics
             }
             else if (wallSliding)
             {
-                Debug.Log("WALL JUMP!");
+                //Debug.Log("WALL JUMP!");
                 StartCoroutine(WallJump());
             }
         }
@@ -157,6 +162,8 @@ public class PlayerController : CustomPhysics
             CheckForWallCling();
         }
     }
+
+    
 
     #region Wall Jumping/Sliding
     public void CheckForWallCling()
@@ -250,5 +257,23 @@ public class PlayerController : CustomPhysics
     }
     #endregion
 
+    #region Data Management
+
+    public void SaveData(GameData data)
+    {
+        data.playerPosition = CheckpointManager.instance.currentCheckpointPos;
+    }
+
+    public void LoadData(GameData data)
+    {
+        Debug.Log(data.playerPosition);
+        if(CheckpointManager.instance.currentScene == SceneManager.GetActiveScene().name || CheckpointManager.instance.currentScene == "")
+        {
+            transform.position = data.playerPosition;
+        }
+        
+    }
+
+    #endregion
 
 }
