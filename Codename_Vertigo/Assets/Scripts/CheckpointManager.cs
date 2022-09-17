@@ -40,6 +40,13 @@ public class CheckpointManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name != "Main_Menu")
         {
             if (SceneManager.GetActiveScene().name != currentScene) {
+
+                if (GameManager.instance.loadingGame)
+                {
+                    GameManager.instance.loadingGame = false;
+                    return;
+                }
+
                 currentCheckpoint = null;
                 GameObject levelStart = GameObject.FindGameObjectWithTag("LevelStart");
                 currentCheckpointPos = levelStart.transform.position;

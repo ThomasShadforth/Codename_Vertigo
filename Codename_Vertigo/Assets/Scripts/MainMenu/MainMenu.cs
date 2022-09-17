@@ -45,7 +45,7 @@ public class MainMenu : MonoBehaviour
         //DisableMenuButtons();
 
         string sceneToLoad = DataPersistenceManager.instance.GetLastScene();
-
+        GameManager.instance.loadingGame = true;
         StartCoroutine(LoadGameCo(sceneToLoad));
         
     }

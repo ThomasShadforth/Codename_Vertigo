@@ -153,6 +153,7 @@ public class SaveSlotMenu : MonoBehaviour
         }
         else
         {
+            GameManager.instance.loadingGame = true;
             SceneManager.LoadSceneAsync(sceneToLoad);
         }
 

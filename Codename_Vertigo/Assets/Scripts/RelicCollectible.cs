@@ -26,6 +26,15 @@ public class RelicCollectible : MonoBehaviour, IDataPersistence
         
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.GetComponent<PlayerController>())
+        {
+            relicCollected = true;
+            gameObject.SetActive(false);
+        }
+    }
+
     public void SaveData(GameData data)
     {
         if (data.relicsDictionary.ContainsKey(id))

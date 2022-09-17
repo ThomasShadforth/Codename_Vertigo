@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public bool isLoading = false;
 
+    public bool loadingGame = false;
+
     [SerializeField] Scene currentSceneAsset;
 
     private void Awake()

@@ -130,6 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 473019899}
     m_Modifications:
+    - target: {fileID: 9015574365811534888, guid: 796393a185836e743b3b535bfb914925, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
     - target: {fileID: 9015574365811534890, guid: 796393a185836e743b3b535bfb914925, type: 3}
       propertyPath: profileId
       value: 1
@@ -424,6 +428,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 1412894861}
+    - target: {fileID: 1421430174615807838, guid: 75e1553649718aa4bbce2a9f514d4ce8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
     - target: {fileID: 3311356108163799542, guid: 75e1553649718aa4bbce2a9f514d4ce8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -775,7 +783,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -887,7 +895,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1161,7 +1169,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1332,6 +1340,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 11104526}
+    - target: {fileID: 1421430174615807838, guid: 75e1553649718aa4bbce2a9f514d4ce8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
     - target: {fileID: 3311356108163799542, guid: 75e1553649718aa4bbce2a9f514d4ce8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1611,6 +1623,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 1323158614}
+    - target: {fileID: 1421430174615807838, guid: 75e1553649718aa4bbce2a9f514d4ce8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
     - target: {fileID: 3311356108163799542, guid: 75e1553649718aa4bbce2a9f514d4ce8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1991,6 +2007,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 473019899}
     m_Modifications:
+    - target: {fileID: 9015574365811534888, guid: 796393a185836e743b3b535bfb914925, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
     - target: {fileID: 9015574365811534890, guid: 796393a185836e743b3b535bfb914925, type: 3}
       propertyPath: profileId
       value: 2
@@ -2222,7 +2242,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2252,6 +2272,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 473019899}
     m_Modifications:
+    - target: {fileID: 9015574365811534888, guid: 796393a185836e743b3b535bfb914925, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
     - target: {fileID: 9015574365811534890, guid: 796393a185836e743b3b535bfb914925, type: 3}
       propertyPath: profileId
       value: 3
@@ -2718,7 +2742,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3148,7 +3172,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3476,6 +3500,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 9015574367827750827}
+    - target: {fileID: 1421430174615807838, guid: 75e1553649718aa4bbce2a9f514d4ce8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
     - target: {fileID: 3311356108163799542, guid: 75e1553649718aa4bbce2a9f514d4ce8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3574,6 +3602,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 473019899}
     m_Modifications:
+    - target: {fileID: 9015574365811534888, guid: 796393a185836e743b3b535bfb914925, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 747750e2f939e1546ae39b92dea814e5, type: 3}
     - target: {fileID: 9015574365811534890, guid: 796393a185836e743b3b535bfb914925, type: 3}
       propertyPath: clearDataButton
       value: 
