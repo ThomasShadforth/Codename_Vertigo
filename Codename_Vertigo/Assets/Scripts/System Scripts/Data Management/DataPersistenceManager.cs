@@ -87,13 +87,16 @@ public class DataPersistenceManager : MonoBehaviour
         //Load the game
         LoadGame();
 
-        //Start up auto saving
-        if(autoSaveCoroutine != null)
+        if (SceneManager.GetActiveScene().name != "Main_Menu")
         {
-            StopCoroutine(autoSaveCoroutine);
-        }
+            //Start up auto saving
+            if (autoSaveCoroutine != null)
+            {
+                StopCoroutine(autoSaveCoroutine);
+            }
 
-        autoSaveCoroutine = StartCoroutine(AutoSave());
+            autoSaveCoroutine = StartCoroutine(AutoSave());
+        }
     }
 
     //Changes the currently selected profile ID (Called when clicking on a save slot
@@ -206,7 +209,10 @@ public class DataPersistenceManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         //Save the game when closing the application
-        SaveGame();
+        if (SceneManager.GetActiveScene().name != "Main_Menu")
+        {
+            SaveGame();
+        }
     }
 
     public string GetSelectedID()

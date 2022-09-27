@@ -24,11 +24,15 @@ public class PlayerController : CustomPhysics, IDataPersistence
     public LayerMask wallJumpLayer;
 
     public bool facingRight;
-    
+    bool isJumping;
+    bool isFalling;
+
+    Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         xDirect = 1;
         facingRight = true;
     }
@@ -36,6 +40,18 @@ public class PlayerController : CustomPhysics, IDataPersistence
     // Update is called once per frame
     protected override void ComputeVelocity()
     {
+        if (grounded)
+        {
+            isFalling = false;
+        }
+        else
+        {
+            if (velocity.y <= 0)
+            {
+                Debug.Log(velocity.y);
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             GameManager.instance.RestartScene();
@@ -138,6 +154,7 @@ public class PlayerController : CustomPhysics, IDataPersistence
 
         if (Input.GetButtonDown("Jump"))
         {
+            
             if (grounded)
             {
                 velocity.y = jumpHeight;
@@ -161,6 +178,9 @@ public class PlayerController : CustomPhysics, IDataPersistence
         {
             CheckForWallCling();
         }
+
+        AnimateCharacter();
+
     }
 
     
@@ -232,6 +252,56 @@ public class PlayerController : CustomPhysics, IDataPersistence
         {
             rb2d.position = transformAtCollision;
         }
+    }
+
+    #endregion
+
+    #region Animating
+
+    void AnimateCharacter()
+    {
+        ///Player movement animations
+        ///Responsible for run movements
+        if(targetVelocity.x != 0)
+        {
+            animator.SetBool("isRunning", true);
+        }
+        else
+        {
+            animator.SetBool("isRunning", false);
+        }
+
+        ///Player Jump Animation
+
+        if (!grounded)
+        {
+            if (velocity.y > 0)
+            {
+                animator.SetBool("isJumping", true);
+                animator.SetBool("isFalling", false);
+            }
+            else
+            {
+                animator.SetBool("isJumping", false);
+                animator.SetBool("isFalling", true);
+            }
+        }
+        else
+        {
+            animator.SetBool("isFalling", false);
+        }
+
+
+        ///Player Wall Slide + Transition
+        if (wallSliding)
+        {
+            animator.SetBool("isWallSliding", true);
+        }
+        else
+        {
+            animator.SetBool("isWallSliding", false);
+        }
+        
     }
 
     #endregion

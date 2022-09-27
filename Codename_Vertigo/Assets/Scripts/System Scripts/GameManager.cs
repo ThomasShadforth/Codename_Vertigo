@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        Debug.Log("LOADING DATA ON: " + gameObject.name);
+        
         foreach(KeyValuePair<string, bool> pair in data.relicsDictionary)
         {
             if (pair.Value)

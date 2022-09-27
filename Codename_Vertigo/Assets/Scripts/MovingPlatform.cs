@@ -41,11 +41,7 @@ public class MovingPlatform : MonoBehaviour
             StartCoroutine(Wait());
         }
 
-        if(target != null)
-        {
-            offset = target.transform.position - transform.position;
-            target.GetComponent<Rigidbody2D>().position = new Vector2(transform.position.x + offset.x, target.transform.position.y);
-        }
+        
 
     }
 

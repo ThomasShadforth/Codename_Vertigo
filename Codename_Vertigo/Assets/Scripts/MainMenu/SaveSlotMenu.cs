@@ -19,9 +19,11 @@ public class SaveSlotMenu : MonoBehaviour
     [Header("Confirmation Pop-up")]
     [SerializeField] private ConfirmationPopUp confirmationPopUpMenu;
 
+    Animator animator;
     private void Awake()
     {
         saveSlots = this.GetComponentsInChildren<SaveSlot>();
+        animator = GetComponent<Animator>();
     }
 
 
@@ -94,8 +96,11 @@ public class SaveSlotMenu : MonoBehaviour
     
     public void OnBackClicked()
     {
+        /*
         mainMenu.ActivateMenu();
-        this.DeactivateMenu();
+        this.DeactivateMenu();*/
+
+        StartCoroutine(BackClickedCo());
     }
 
 
@@ -126,6 +131,10 @@ public class SaveSlotMenu : MonoBehaviour
                 slot.SetInteractable(true);
             }
         }
+
+        animator.SetBool("isOpening", true);
+        animator.SetBool("isClosing", false);
+
     }
 
     public void DeactivateMenu()
@@ -159,5 +168,14 @@ public class SaveSlotMenu : MonoBehaviour
 
         
         
+    }
+
+    IEnumerator BackClickedCo()
+    {
+        animator.SetBool("isClosing", true);
+        animator.SetBool("isOpening", false);
+        yield return new WaitForSeconds(1f);
+        mainMenu.ActivateMenu();
+        this.DeactivateMenu();
     }
 }
