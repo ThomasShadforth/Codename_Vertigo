@@ -1,9 +1,12 @@
-﻿
+﻿using System;
 
 public class HealthSystem
 {
     private int health;
     private int healthMax;
+
+    public event EventHandler OnHealthChanged;
+
     public HealthSystem(int healthMax)
     {
         this.healthMax = healthMax;
@@ -15,6 +18,11 @@ public class HealthSystem
         return health;
     }
 
+    public float GetHealthPercent()
+    {
+        return (float)health / healthMax;
+    }
+
     public void Damage(int damageAmount)
     {
         health -= damageAmount;
@@ -22,6 +30,16 @@ public class HealthSystem
         {
             health = 0;
         }
+
+        if(OnHealthChanged != null)
+        {
+            OnHealthChanged(this, EventArgs.Empty);
+        }
+    }
+
+    public bool CheckIsDead()
+    {
+        return health <= 0;
     }
 
     public void Heal(int healAmount)
@@ -31,6 +49,11 @@ public class HealthSystem
         if(health > healthMax)
         {
             health = healthMax;
+        }
+
+        if (OnHealthChanged != null)
+        {
+            OnHealthChanged(this, EventArgs.Empty);
         }
     }
 }

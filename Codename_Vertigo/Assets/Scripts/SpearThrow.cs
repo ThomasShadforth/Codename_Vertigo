@@ -25,6 +25,7 @@ public class SpearThrow : MonoBehaviour
     public int numberOfDots;
     public float distanceBetweenDots;
 
+    [SerializeField] GameObject spearObject;
 
 
     //Prevents the player from repeatedly throwing the spear if they've thrown it out already.
@@ -121,6 +122,7 @@ public class SpearThrow : MonoBehaviour
         /*
         Spear newSpear = Instantiate(playerSpear, throwPosition.position, throwPosition.rotation);
         newSpear.directionOfSpear = (throwPosition.transform.right * (throwingStrength * throwPower) * controller.xDirect);*/
+        spearObject.SetActive(false);
 
         SpearNorm newSpear = Instantiate(testSpear, throwPosition.position, throwingPivot.rotation);
         newSpear.GetComponent<Rigidbody2D>().velocity = throwPosition.transform.right * (throwingStrength * throwPower) * controller.xDirect;
@@ -158,7 +160,15 @@ public class SpearThrow : MonoBehaviour
         {
             Destroy(other.gameObject);
             spearThrown = false;
+            spearObject.SetActive(true);
+            GetComponent<Animator>().Play("IDLE");
+            spearObject.GetComponent<Animator>().Play("IDLE");
         }
         
+    }
+
+    public bool GetSpearThrown()
+    {
+        return spearThrown;
     }
 }

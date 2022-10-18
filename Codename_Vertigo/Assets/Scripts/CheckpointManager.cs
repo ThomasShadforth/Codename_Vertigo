@@ -9,6 +9,7 @@ public class CheckpointManager : MonoBehaviour
     public static CheckpointManager instance;
 
     public Vector2 currentCheckpointPos;
+    public string levelGateName;
     [SerializeField] LevelCheckpoint currentCheckpoint;
 
     public string currentScene = "";
@@ -47,11 +48,39 @@ public class CheckpointManager : MonoBehaviour
                     return;
                 }
 
-                currentCheckpoint = null;
-                GameObject levelStart = GameObject.FindGameObjectWithTag("LevelStart");
-                currentCheckpointPos = levelStart.transform.position;
-                FindObjectOfType<PlayerController>().transform.position = currentCheckpointPos;
-                currentScene = SceneManager.GetActiveScene().name;
+                if (SceneManager.GetActiveScene().name != "Level_Hub")
+                {
+                    currentCheckpoint = null;
+                    GameObject levelStart = GameObject.FindGameObjectWithTag("LevelStart");
+                    currentCheckpointPos = levelStart.transform.position;
+                    FindObjectOfType<PlayerController>().transform.position = currentCheckpointPos;
+                    currentScene = SceneManager.GetActiveScene().name;
+                }
+                else
+                {
+                    //Write the code to set the player's position
+                    if (levelGateName != "")
+                    {
+                        LevelGate[] levelGates = GameObject.FindObjectsOfType<LevelGate>();
+
+                        for (int i = 0; i < levelGates.Length; i++)
+                        {
+                            if (levelGates[i].levelName == levelGateName)
+                            {
+                                currentCheckpointPos = levelGates[i].gameObject.transform.position;
+                                FindObjectOfType<PlayerController>().transform.position = currentCheckpointPos;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        GameObject levelHubStart = GameObject.FindGameObjectWithTag("LevelStart");
+                        currentCheckpointPos = levelHubStart.transform.position;
+                        FindObjectOfType<PlayerController>().transform.position = currentCheckpointPos;
+                    }
+
+                    currentScene = SceneManager.GetActiveScene().name;
+                }
             }  
         }
     }

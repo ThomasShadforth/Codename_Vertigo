@@ -27,7 +27,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (waiting)
+        if (waiting || Dialogue_Manager.instance.dialogueIsPlaying || GameManager.instance.isPaused)
         {
             return;
         }

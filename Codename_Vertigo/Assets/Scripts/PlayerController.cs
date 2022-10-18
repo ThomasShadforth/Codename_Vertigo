@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.SceneManagement;
 
-public class PlayerController : CustomPhysics, IDataPersistence
+public class PlayerController : CustomPhysics, IDataPersistence, IDamageInterface, IKnockbackInterface
 {
     public float maxSpeed = 7f;
     public float jumpHeight = 7f;
@@ -16,6 +17,9 @@ public class PlayerController : CustomPhysics, IDataPersistence
     public float minDashTimer = .2f;
     float minDashTime;
 
+    public float knockbackTime;
+    public float knockForce;
+
     public bool isDashing;
     public bool wallJumping;
 
@@ -27,34 +31,68 @@ public class PlayerController : CustomPhysics, IDataPersistence
     bool isJumping;
     bool isFalling;
 
+    public bool isAttacking;
+
+    [SerializeField] AudioSource audioSource;
+
     Animator animator;
+    
+    HealthSystem healthSystem;
+    HealthBar playerHealthBar;
+
+    PlayerCombat combatSystem;
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
+        combatSystem = GetComponent<PlayerCombat>();
         xDirect = 1;
         facingRight = true;
+        healthSystem = new HealthSystem(100);
+        playerHealthBar = GameObject.Find("PlayerHealthBar").GetComponent<HealthBar>();
+        
+        if(playerHealthBar != null)
+        {
+            Debug.Log("HEALTH FOUND");
+        }
+
+        healthSystem.OnHealthChanged += HealthSystem_OnHealthChanged;
     }
 
     // Update is called once per frame
     protected override void ComputeVelocity()
     {
-        if (grounded)
+        if (isKnocked || GameManager.instance.isPaused)
         {
-            isFalling = false;
+            return;
         }
-        else
+
+        if (Dialogue_Manager.instance.dialogueIsPlaying)
         {
-            if (velocity.y <= 0)
+            animator.speed = 0f;
+            return;
+        } else
+        {
+            if(animator.speed == 0f)
             {
-                Debug.Log(velocity.y);
+                animator.speed = 1f;
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (grounded)
         {
-            GameManager.instance.RestartScene();
+            isFalling = false;
+            
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            healthSystem.Heal(10);
+        } else if (Input.GetKeyDown(KeyCode.P))
+        {
+            healthSystem.Damage(10);
         }
 
         if (!isDashing)
@@ -102,9 +140,7 @@ public class PlayerController : CustomPhysics, IDataPersistence
 
             minDashTime += Time.deltaTime;
 
-            if (Input.GetMouseButtonDown(0)) {
-                TestMethod();
-            }
+            
         }
 
         if(lastKeyPressed != KeyCode.None)
@@ -116,9 +152,9 @@ public class PlayerController : CustomPhysics, IDataPersistence
             }
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !GetComponent<SpearThrow>().GetSpearThrown())
         {
-            TestMethod();
+            combatSystem.Attack();
         }
         
 
@@ -157,6 +193,7 @@ public class PlayerController : CustomPhysics, IDataPersistence
             
             if (grounded)
             {
+                dustEffect.Play();
                 velocity.y = jumpHeight;
             }
             else if (wallSliding)
@@ -183,13 +220,16 @@ public class PlayerController : CustomPhysics, IDataPersistence
 
     }
 
+    void CreateDust()
+    {
+        
+        dustEffect.Play();
+    }
     
 
     #region Wall Jumping/Sliding
     public void CheckForWallCling()
     {
-        
-
         Vector2 directionOfRay = Vector2.right + new Vector2(wallClingRange - 1, 0);
         directionOfRay.x = directionOfRay.x * xDirect;
 
@@ -202,7 +242,14 @@ public class PlayerController : CustomPhysics, IDataPersistence
         if (onWall && Input.GetAxisRaw("Horizontal") != 0)
         {
             wallSliding = true;
+
+            if (!wallDustEffect.gameObject.activeInHierarchy)
+            {
+
+                wallDustEffect.gameObject.SetActive(true);
+            }
             gravityModifier = 1.3f;
+            
             velocity.y = velocity.y * .5f;
         }
         else
@@ -214,8 +261,10 @@ public class PlayerController : CustomPhysics, IDataPersistence
 
     public IEnumerator WallJump()
     {
+        wallDustEffect.gameObject.SetActive(false);
         xDirect *= -1;
         velocity.y = jumpHeight * .9f;
+        dustEffect.Play();
         rb2d.velocity = new Vector2(-Input.GetAxisRaw("Horizontal") * 15, rb2d.velocity.y);
 
         wallJumping = true;
@@ -229,6 +278,16 @@ public class PlayerController : CustomPhysics, IDataPersistence
         rb2d.velocity = Vector2.zero;
         wallJumping = false;
 
+    }
+
+    #endregion
+
+    #region Sound Effects
+
+    public void PlaySoundEffect()
+    {
+        //For now, simply play the effect attached to the player's audio source
+        audioSource.Play();
     }
 
     #endregion
@@ -260,15 +319,21 @@ public class PlayerController : CustomPhysics, IDataPersistence
 
     void AnimateCharacter()
     {
+        if (isAttacking)
+        {
+            return;
+        }
         ///Player movement animations
         ///Responsible for run movements
         if(targetVelocity.x != 0)
         {
             animator.SetBool("isRunning", true);
+            GetComponentInChildren<Animator>().SetBool("isRunning", true);
         }
         else
         {
             animator.SetBool("isRunning", false);
+            GetComponentInChildren<Animator>().SetBool("isRunning", false);
         }
 
         ///Player Jump Animation
@@ -296,10 +361,15 @@ public class PlayerController : CustomPhysics, IDataPersistence
         if (wallSliding)
         {
             animator.SetBool("isWallSliding", true);
+            if (!wallDustEffect.isPlaying)
+            {
+                wallDustEffect.Play();
+            }
         }
         else
         {
             animator.SetBool("isWallSliding", false);
+            wallDustEffect.Stop();
         }
         
     }
@@ -325,6 +395,62 @@ public class PlayerController : CustomPhysics, IDataPersistence
     {
         Gizmos.DrawWireSphere(new Vector3(transform.position.x + .3f * xDirect, transform.position.y, transform.position.z), .1f);
     }
+    #endregion
+
+    #region Health Management
+
+    public void Damage(float damage, Transform attackerPos = null)
+    {
+
+        healthSystem.Damage((int)damage);
+
+        Vector2 knockbackDir = transform.position - attackerPos.position;
+        knockbackDir = knockbackDir.normalized;
+        Debug.Log(knockbackDir.y);
+        animator.Play("Player_Hit");
+        StartCoroutine(KnockbackCo(knockbackDir));
+
+    }
+
+    public void CheckForHealth()
+    {
+
+    }
+
+    void HealthSystem_OnHealthChanged(object sender, System.EventArgs e)
+    {
+        playerHealthBar.SetHealthFill(healthSystem.GetHealthPercent());
+        if (healthSystem.CheckIsDead())
+        {
+            //Restart the scene if the player dies
+        }
+    }
+
+    public IEnumerator KnockbackCo(Vector2 knockbackDir)
+    {
+        float knockTimer = knockbackTime;
+
+        while(knockTimer > 0)
+        {
+            if (!isKnocked)
+            {
+                isKnocked = true;
+                rb2d.velocity = new Vector2(knockbackDir.x * knockForce, knockbackDir.y + (2 * knockForce));
+            }
+
+            rb2d.velocity = Vector2.MoveTowards(rb2d.velocity, Vector2.zero, 2f * Time.deltaTime);
+
+            knockTimer -= 1 * Time.deltaTime;
+            yield return null;
+        }
+
+        isKnocked = false;
+
+        rb2d.velocity = Vector2.zero;
+        
+        
+    }
+
     #endregion
 
     #region Data Management

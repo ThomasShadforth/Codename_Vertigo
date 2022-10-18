@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public bool isLoading = false;
 
+    public bool isPaused;
+
     public bool loadingGame = false;
 
     [SerializeField] Scene currentSceneAsset;
@@ -92,6 +94,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         UIFade.instance.FadeToBlack();
         yield return new WaitForSeconds(1f);
         SceneManager.LoadSceneAsync(levelToLoad);
+        isLoading = false;
         
     }
     

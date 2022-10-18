@@ -7,6 +7,7 @@ public class RelicCollectible : MonoBehaviour, IDataPersistence
     [SerializeField] private string id;
 
     public bool relicCollected;
+    public bool isBossRelic;
 
     [ContextMenu("Generate guid for id")]
     private void GenerateGuid()
@@ -28,6 +29,7 @@ public class RelicCollectible : MonoBehaviour, IDataPersistence
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        //Set the relic to collected when walking into the trigger zone
         if (other.gameObject.GetComponent<PlayerController>())
         {
             relicCollected = true;
@@ -35,6 +37,8 @@ public class RelicCollectible : MonoBehaviour, IDataPersistence
         }
     }
 
+
+    //Save the relic's data
     public void SaveData(GameData data)
     {
         if (data.relicsDictionary.ContainsKey(id))
@@ -45,6 +49,8 @@ public class RelicCollectible : MonoBehaviour, IDataPersistence
         data.relicsDictionary.Add(id, relicCollected);
     }
 
+    //Check the dictionary to see if it exists.
+    //if it does, set it to active/inactive depending on if it's already been collected
     public void LoadData(GameData data)
     {
         data.relicsDictionary.TryGetValue(id, out relicCollected);

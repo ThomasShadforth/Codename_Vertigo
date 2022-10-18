@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - LevelStart
+  - DialoguePanel
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - 
   - WallClimbObj
   - PostProcessing
-  - 
+  - Enemy
   - 
   - 
   - 

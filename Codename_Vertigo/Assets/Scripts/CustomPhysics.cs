@@ -9,6 +9,7 @@ public class CustomPhysics : MonoBehaviour
     public bool canWallJump;
     public bool onWall;
     public bool wallSliding;
+    
 
     protected Vector2 targetVelocity;
     protected bool grounded = false;
@@ -31,6 +32,11 @@ public class CustomPhysics : MonoBehaviour
 
     public bool onPlatform;
     public Vector2 platformPos;
+
+    public ParticleSystem dustEffect;
+    public ParticleSystem wallDustEffect;
+
+    public bool isKnocked;
 
     [SerializeField] protected bool isDying;
 
@@ -139,7 +145,9 @@ public class CustomPhysics : MonoBehaviour
 
                 if(currentNormal.y > minGroundNormalY)
                 {
-                    
+
+
+
                     grounded = true;
                     if (yMovement)
                     {

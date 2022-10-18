@@ -18,6 +18,14 @@ public class GameData
     public Vector3 playerPosition;
     //Stores a dictionary of relics, and whether or not the player has collected them
     public SerializableDictionary<string, bool> relicsDictionary;
+    //Store a dictionary of the boss relics, and whether or not the player has collected them
+    public SerializableDictionary<string, bool> bossRelicDictionary;
+    //Stores a dictionary of level gates, and whether or not they have been unlocked by the player yet
+    public SerializableDictionary<string, bool> levelGateDictionary;
+    //Store a dictionary of level hub barriers, and whether or not they have been unlocked by the player
+    public SerializableDictionary<string, bool> hubBarrierDictionary;
+    
+
     //Stores the name of the last scene the player saved in (Will be used for checking whether or not loading into different scenes via continue works)
     public string lastSceneSaved;
 
@@ -29,6 +37,9 @@ public class GameData
         this.relicsCollected = 0;
         this.playerPosition = new Vector3(-.29f, 0.38f, 0);
         this.relicsDictionary = new SerializableDictionary<string, bool>();
+        this.bossRelicDictionary = new SerializableDictionary<string, bool>();
+        this.levelGateDictionary = new SerializableDictionary<string, bool>();
+        this.hubBarrierDictionary = new SerializableDictionary<string, bool>();
         this.lastSceneSaved = "";
     }
 

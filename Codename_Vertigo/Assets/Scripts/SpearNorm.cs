@@ -25,10 +25,11 @@ public class SpearNorm : MonoBehaviour
         mainCollider = GetComponent<BoxCollider2D>();
         triggerArea = GetComponent<CircleCollider2D>();
 
-        Invoke("EnableCollider", .1f);
+        Invoke("EnableCollider", .2f);
 
         if (isPickup)
         {
+            isFalling = false;
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             mainCollider.enabled = false;
             triggerArea.enabled = true;
@@ -44,8 +45,7 @@ public class SpearNorm : MonoBehaviour
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
             lastRightTransform = transform.right;
-            Debug.Log(lastRightTransform.y + " is the y direction!");
-            Debug.Log(lastRightTransform.x + " is the x direction!");
+            
             
         }
     }
@@ -200,6 +200,7 @@ public class SpearNorm : MonoBehaviour
                 {
                     if (!other.gameObject.GetComponent<PlayerController>())
                     {
+                        
                         objectToDamage.Damage(20f);
                         if (other.gameObject.GetComponent<EnemyAIBase>())
                         {
