@@ -29,13 +29,19 @@ public class GroundCheck : MonoBehaviour
         for(int i = 0; i < other.contactCount; i++)
         {
             Vector2 normal = other.GetContact(i).normal;
-            onGround |= normal.y >= .9f;
+            
+            onGround |= normal.y >= .8f;
+            
         }
     }
 
     void GetFriction(Collision2D other)
     {
-        PhysicsMaterial2D material = other.rigidbody.sharedMaterial;
+        PhysicsMaterial2D material = null;
+        if (other.gameObject.GetComponent<Rigidbody2D>())
+        {
+            material = other.rigidbody.sharedMaterial;
+        }
 
         friction = 0;
 

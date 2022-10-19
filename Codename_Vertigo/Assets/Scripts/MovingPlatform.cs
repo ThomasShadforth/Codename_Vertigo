@@ -14,6 +14,8 @@ public class MovingPlatform : MonoBehaviour
     GameObject target;
     public Vector3 offset;
 
+    
+
     void Start()
     {
         startPosition = transform.position;
@@ -27,10 +29,17 @@ public class MovingPlatform : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (waiting || Dialogue_Manager.instance.dialogueIsPlaying || GameManager.instance.isPaused)
+        /*if (waiting || Dialogue_Manager.instance.dialogueIsPlaying || GameManager.instance.isPaused)
+        {
+            return;
+        }*/
+
+        if (waiting)
         {
             return;
         }
+
+        
 
         transform.position += (Vector3)moveVelocity * Time.deltaTime;
 
@@ -41,18 +50,17 @@ public class MovingPlatform : MonoBehaviour
             StartCoroutine(Wait());
         }
 
-        if(target != null)
+        if (target != null)
         {
-            Debug.Log("TARGET IS " + target.name);
-            offset = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
-            target.GetComponent<Rigidbody2D>().position += (Vector2)offset;
+            //target.GetComponent<Rigidbody2D>().velocity = new Vector2(_rb2d.velocity.x, target.GetComponent<Rigidbody2D>().velocity.y);
         }
-        
+
 
     }
 
     IEnumerator Wait()
     {
+        
         waiting = true;
         startPosition = transform.position;
         yield return new WaitForSeconds(waitTime);
@@ -63,30 +71,27 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.GetComponent<PlayerController>())
+        
+    }
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("AAAAAAA");
+            if (target == null)
+            {
+                target = other.gameObject;
+                target.transform.parent = transform;
+                //offset = target.GetComponent<Rigidbody2D>().velocity - _rb2d.velocity;
+            }
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnCollisionExit2D(Collision2D other)
     {
-        if (other.gameObject.GetComponent<PlayerController>())
+        if (other.gameObject.CompareTag("Player"))
         {
-            
-            target = other.gameObject;
-
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.gameObject.GetComponent<PlayerController>())
-        {
-            
+            target.transform.parent = null;
             target = null;
         }
     }
-
-
 }
