@@ -10146,7 +10146,7 @@ MonoBehaviour:
   - {x: -0.16204834, y: 0.5742816, z: 0}
   m_ShapePathHash: -268713907
   m_Mesh: {fileID: 0}
-  m_InstanceId: -49972
+  m_InstanceId: -34888
 --- !u!114 &4155525102119797031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10179,8 +10179,8 @@ MonoBehaviour:
   dashDistance: 11
   dashTime: 0.5
   minDashTimer: 0.2
-  knockbackTime: 0
-  knockForce: 0
+  knockbackTime: 0.5
+  knockForce: 2
   isDashing: 0
   wallJumping: 0
   wallClingRange: 0.5

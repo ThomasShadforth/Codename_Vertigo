@@ -7,6 +7,7 @@ The spear! it's up there! #speaker:Rock Boy #layout:right #portrait:None
 Thank the crystals, it doesn't look like it's damaged... #speaker:Rock Boy #layout:right #portrait:None
 Though I've never seen these small compartments, looks like something slid off the sides though.
 Still! Got to keep moving forward. That... gross orange slime looks like it's too sticky to climb onto. But maybe the spear could stick to it!
+Just got to throw it with right mouse!
 ->END
 
 === CeilingWallStick ===

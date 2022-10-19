@@ -41,6 +41,12 @@ public class MovingPlatform : MonoBehaviour
             StartCoroutine(Wait());
         }
 
+        if(target != null)
+        {
+            Debug.Log("TARGET IS " + target.name);
+            offset = target.GetComponent<Rigidbody2D>().position - GetComponent<Rigidbody2D>().position;
+            target.GetComponent<Rigidbody2D>().position += (Vector2)offset;
+        }
         
 
     }
@@ -55,14 +61,21 @@ public class MovingPlatform : MonoBehaviour
 
     }
 
-
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.GetComponent<PlayerController>())
+        {
+            Debug.Log("AAAAAAA");
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.GetComponent<PlayerController>())
         {
-            Debug.Log("AAAAAAAAAAA");
+            
             target = other.gameObject;
+
         }
     }
 
@@ -70,7 +83,7 @@ public class MovingPlatform : MonoBehaviour
     {
         if (other.gameObject.GetComponent<PlayerController>())
         {
-            Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            
             target = null;
         }
     }

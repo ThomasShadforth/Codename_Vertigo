@@ -103,7 +103,8 @@ public class CustomPhysics : MonoBehaviour
     {
         
         float distance = move.magnitude;
-        
+        bool onPlat = false;
+        Vector2 platPos = Vector2.zero;
 
         if (distance > minMoveDistance)
         {
@@ -121,12 +122,22 @@ public class CustomPhysics : MonoBehaviour
                 hitBufferList.Add(hitBuffer[i]);
             }
 
+            //check if the player is stood on a platform
+            
+
+            foreach(RaycastHit2D hit in hitBufferList)
+            {
+                if (hit.collider.gameObject.GetComponent<MovingPlatform>())
+                {
+                    onPlat = true;
+                    platPos = hit.collider.GetComponent<Rigidbody2D>().position;
+                    Debug.Log(platPos);
+                    break;
+                }
+            }
 
             for (int i = 0; i < hitBufferList.Count; i++)
             {
-                
-
-                
 
                 //Check the normal of the objects to determine the angle of the collision
                 Vector2 currentNormal = hitBufferList[i].normal;
@@ -170,8 +181,15 @@ public class CustomPhysics : MonoBehaviour
             }
 
         }
+
         
         rb2d.position = rb2d.position + move.normalized * distance;
+
+        if (onPlat)
+        {
+            Vector2 offset = rb2d.position - platPos;
+            rb2d.position = platPos + offset;
+        }
         
     }
 

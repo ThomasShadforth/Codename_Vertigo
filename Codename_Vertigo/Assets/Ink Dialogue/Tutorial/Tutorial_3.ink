@@ -3,6 +3,7 @@
 === Main ===
 More slimes?! Well, at least I've got the spear back! #speaker:Rock Boy #layout:right #portrait:None
 Guess I gotta show them how we throw down back home!
+Press left mouse to attack while the spear is held! You can't attack after throwing it!
 -> END
 
 === Relic ===

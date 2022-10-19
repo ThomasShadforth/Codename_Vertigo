@@ -283,8 +283,8 @@ MonoBehaviour:
   - {fileID: 0}
   startingPatrolIndex: 0
   minDistanceFromPoint: 0.2
-  detectRadius: 2
-  minDistToAttack: 1
+  detectRadius: 3.09
+  minDistToAttack: 0.9
   minDistToJump: 0
   canJump: 0
   knockForce: 2.62
