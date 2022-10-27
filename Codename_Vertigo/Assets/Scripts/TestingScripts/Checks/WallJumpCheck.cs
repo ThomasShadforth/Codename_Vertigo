@@ -19,18 +19,6 @@ public class WallJumpCheck : MonoBehaviour
 
         Debug.DrawRay(transform.position, rayDirection);
 
-        //onWall = Physics2D.OverlapCircle(new Vector2(transform.position.x + (3f * xDirect), transform.position.y), .1f, wallLayer);
-
-        /*
-        if(onWall && Input.GetAxisRaw("Horizontal") != 0)
-        {
-            wallSliding = true;
-        }
-        else
-        {
-            wallSliding = false;
-        }*/
-
         if (wallHit && Input.GetAxisRaw("Horizontal") != 0)
         {
             wallSliding = true;
@@ -39,7 +27,6 @@ public class WallJumpCheck : MonoBehaviour
         {
             wallSliding = false;
         }
-
 
         return wallSliding;
     }

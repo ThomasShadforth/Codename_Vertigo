@@ -131,7 +131,7 @@ public class SpearThrow : MonoBehaviour
 
         
     }
-
+    
     void TriggerRetrieveSpear()
     {
         

@@ -30,7 +30,7 @@ public class RelicCollectible : MonoBehaviour, IDataPersistence
     private void OnTriggerEnter2D(Collider2D other)
     {
         //Set the relic to collected when walking into the trigger zone
-        if (other.gameObject.GetComponent<PlayerController>())
+        if (other.CompareTag("Player"))
         {
             relicCollected = true;
             gameObject.SetActive(false);

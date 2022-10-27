@@ -13,7 +13,7 @@ public class FollowCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        target = FindObjectOfType<PlayerController>().transform;
+        target = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     private void FixedUpdate()

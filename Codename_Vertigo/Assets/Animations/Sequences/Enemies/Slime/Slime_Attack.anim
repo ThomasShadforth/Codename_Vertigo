@@ -202,7 +202,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 1.2833333
-    functionName: ResetAnimation
+    functionName: ResetAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

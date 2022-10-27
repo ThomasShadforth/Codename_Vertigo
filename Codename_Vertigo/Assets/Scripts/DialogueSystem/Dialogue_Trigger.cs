@@ -43,7 +43,7 @@ public class Dialogue_Trigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.GetComponent<PlayerController>())
+        if (other.CompareTag("Player"))
         {
             if (triggerOnEnter)
             {
@@ -58,7 +58,7 @@ public class Dialogue_Trigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.GetComponent<PlayerController>())
+        if (other.CompareTag("Player"))
         {
             playerInRange = false;
         }

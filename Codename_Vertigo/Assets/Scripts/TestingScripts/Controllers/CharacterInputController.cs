@@ -10,7 +10,7 @@ public class CharacterInputController : GenericInputController
         return Input.GetButtonDown("Jump");
     }
 
-    public override float GetMoveInput()
+    public override float GetMoveInput(float moveDir = 0)
     {
         return Input.GetAxisRaw("Horizontal");
     }
@@ -22,6 +22,23 @@ public class CharacterInputController : GenericInputController
 
     public override bool GetAttackInput()
     {
-        throw new System.NotImplementedException();
+        return Input.GetButtonDown("Fire1");
     }
+
+    public bool GetSpearInput()
+    {
+        return Input.GetButton("Fire2");
+    }
+
+    public bool GetSpearInputDown()
+    {
+        return Input.GetButtonDown("Fire2");
+    }
+
+    public bool GetSpearInputUp()
+    {
+        return Input.GetButtonUp("Fire2");
+    }
+
+
 }

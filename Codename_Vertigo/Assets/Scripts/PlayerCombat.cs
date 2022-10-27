@@ -5,11 +5,14 @@ using System;
 
 public class PlayerCombat : MonoBehaviour
 {
+    [SerializeField] CharacterInputController input = null;
+
     [SerializeField] int currentAttackNum = 1;
     Animator animator;
     PlayerController ownerPlayer;
 
     bool canAttack = true;
+    bool willAttack;
 
     [SerializeField] Transform spearPoint;
     [SerializeField] float spearPointRadius;
@@ -25,14 +28,30 @@ public class PlayerCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Dialogue_Manager.instance.dialogueIsPlaying || GameManager.instance.isPaused)
+        {
+            return;
+        }
+        if(input != null)
+        {
+            willAttack |= input.GetAttackInput();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (willAttack)
+        {
+            willAttack = false;
+            Attack();
+        }
     }
 
     public void Attack()
     {
         if (canAttack)
         {
-            ownerPlayer.isAttacking = true;
+            //ownerPlayer.isAttacking = true;
             canAttack = false;
             //Add a check to see if the player is grounded (For ground/air attacks)
             animator.Play("Player_Attack_" + currentAttackNum);
@@ -64,18 +83,26 @@ public class PlayerCombat : MonoBehaviour
     {
         Collider2D[] enemiesDetected = Physics2D.OverlapCircleAll(spearPoint.position, spearPointRadius, enemyLayer);
 
-        
-
         foreach(Collider2D enemy in enemiesDetected)
         {
+            /*
             EnemyAIBase enemyAI = enemy.gameObject.GetComponent<EnemyAIBase>();
-            enemyAI.GetComponent<IDamageInterface>().Damage(10, ownerPlayer.transform);
+            enemyAI.GetComponent<IDamageInterface>().Damage(10, ownerPlayer.transform);*/
+
+            EnemyAI enAi = enemy.gameObject.GetComponent<EnemyAI>();
+
+            if (enAi != null)
+            {
+                enAi.Damage(20, transform);
+            }
         }
+
+        //Add functionality for attack destructible objects
     }
 
     public void ResetAnimation()
     {
-        ownerPlayer.isAttacking = false;
+        //ownerPlayer.isAttacking = false;
         canAttack = true;
         animator.Play("IDLE");
         currentAttackNum = 1;
@@ -83,10 +110,10 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<EnemyAIBase>())
+        if (other.GetComponent<EnemyAI>())
         {
-            EnemyAIBase enemy = other.GetComponent<EnemyAIBase>();
-            enemy.GetComponent<IDamageInterface>().Damage(10, ownerPlayer.transform);
+            EnemyAI AI = other.GetComponent<EnemyAI>();
+            AI.Damage(20, transform);
         }
     }
 
