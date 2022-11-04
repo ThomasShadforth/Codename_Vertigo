@@ -27,6 +27,7 @@ public class Jump : MonoBehaviour
     bool _onGround;
     public bool _isKnocked { get; set; }
     public bool _isJumping { get; private set; }
+    public bool _jumping;
 
     // Start is called before the first frame update
     void Awake()
@@ -55,14 +56,13 @@ public class Jump : MonoBehaviour
 
         if (_onGround)
         {
-            Vector2 velo = _rb2d.velocity;
-            velo.y = 0f;
-            _rb2d.velocity = velo;
+            
         }
 
         if(_onGround && _rb2d.velocity.y == 0)
         {
             _jumpPhase = 0;
+            _jumping = false;
             _coyoteCounter = _coyoteTime;
             _isJumping = false;
         }
@@ -100,14 +100,7 @@ public class Jump : MonoBehaviour
 
         if(_rb2d.velocity.y == 0)
         {
-            if (_collisionDataCheck._onGround && _collisionDataCheck._contactNormal.y <= .75)
-            {
-                _rb2d.gravityScale = 0f;
-            }
-            else if (_collisionDataCheck._onGround && _collisionDataCheck._contactNormal.y > .75f)
-            {
-                _rb2d.gravityScale = _defaultGravityScale;
-            }
+            _rb2d.gravityScale = _defaultGravityScale;
         }
 
         _rb2d.velocity = _velocity;
@@ -121,6 +114,7 @@ public class Jump : MonoBehaviour
         
         if (_coyoteCounter > 0f || (_jumpPhase < _maxAirJump && _isJumping))
         {
+            
             if (_isJumping)
             {
                 _jumpPhase++;
@@ -132,6 +126,7 @@ public class Jump : MonoBehaviour
             float jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * _jumpHeight);
 
             _isJumping = true;
+            _jumping = true;
 
             if (_velocity.y > 0)
             {

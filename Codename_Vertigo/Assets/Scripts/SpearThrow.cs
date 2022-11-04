@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class SpearThrow : MonoBehaviour
 {
-    public GameObject spearToThrow;
     public float throwingStrength;
     public float throwPower;
-
     [SerializeField]
     GameObject throwDot;
     GameObject[] throwingArcDots;
@@ -16,9 +14,6 @@ public class SpearThrow : MonoBehaviour
     [SerializeField]
     Transform throwingPivot;
     Vector2 throwDirection;
-
-    [SerializeField]
-    Spear playerSpear;
     [SerializeField]
     SpearNorm testSpear;
 
@@ -31,12 +26,12 @@ public class SpearThrow : MonoBehaviour
     //Prevents the player from repeatedly throwing the spear if they've thrown it out already.
     bool spearThrown;
 
-    PlayerController controller;
+    ReworkedPlayerController controller;
 
     // Start is called before the first frame update
     void Start()
     {
-        controller = GetComponent<PlayerController>();
+        controller = GetComponent<ReworkedPlayerController>();
 
         throwingArcDots = new GameObject[numberOfDots];
 
@@ -59,7 +54,7 @@ public class SpearThrow : MonoBehaviour
 
         //Get the direction of the throw, and multiply it by the current direction (Ensure the aim remains consistent when facing left or right)
         throwDirection = mousePosition - startThrowPos;
-        throwDirection = throwDirection * controller.xDirect;
+        throwDirection = throwDirection * controller._xDirect;
         //Set the right direction of the throw pivot to the direction
         throwingPivot.transform.right = throwDirection;
 
@@ -122,10 +117,10 @@ public class SpearThrow : MonoBehaviour
         /*
         Spear newSpear = Instantiate(playerSpear, throwPosition.position, throwPosition.rotation);
         newSpear.directionOfSpear = (throwPosition.transform.right * (throwingStrength * throwPower) * controller.xDirect);*/
-        spearObject.SetActive(false);
+        //spearObject.SetActive(false);
 
         SpearNorm newSpear = Instantiate(testSpear, throwPosition.position, throwingPivot.rotation);
-        newSpear.GetComponent<Rigidbody2D>().velocity = throwPosition.transform.right * (throwingStrength * throwPower) * controller.xDirect;
+        newSpear.GetComponent<Rigidbody2D>().velocity = throwPosition.transform.right * (throwingStrength * throwPower) * controller._xDirect;
 
         spearThrown = true;
 
@@ -149,7 +144,7 @@ public class SpearThrow : MonoBehaviour
         //Initialise a new vector 2. Set it to be equal to position + direction.normalised * (throwingStrenght * throwPower) * playerDirection, which is multiplied by t. Then add .5, multiplied by gravity (for the arc) and multiply that by t squared.
         //Gravity factors in where an object would fall along an arc.
         //Base throwing strength is multiplied by power, which affects the overall throwing arc
-        Vector2 position = (Vector2)throwPosition.position + ((throwDirection.normalized * (throwingStrength * throwPower) * controller.xDirect) * t) + .5f * Physics2D.gravity * (t * t);
+        Vector2 position = (Vector2)throwPosition.position + ((throwDirection.normalized * (throwingStrength * throwPower) * controller._xDirect) * t) + .5f * Physics2D.gravity * (t * t);
         //Return the position and set the dot to it
         return position;
     }
@@ -160,7 +155,7 @@ public class SpearThrow : MonoBehaviour
         {
             Destroy(other.gameObject);
             spearThrown = false;
-            spearObject.SetActive(true);
+            //spearObject.SetActive(true);
             GetComponent<Animator>().Play("IDLE");
             spearObject.GetComponent<Animator>().Play("IDLE");
         }

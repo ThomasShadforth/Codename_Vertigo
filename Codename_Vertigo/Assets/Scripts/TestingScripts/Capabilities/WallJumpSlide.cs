@@ -44,6 +44,8 @@ public class WallJumpSlide : MonoBehaviour
         _onGround = _collisionDataCheck._onGround;
         _wallDirectionX = _collisionDataCheck._contactNormal.x;
 
+        
+
         //Wall Sliding
         if (_onWall)
         {

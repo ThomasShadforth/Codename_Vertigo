@@ -28,13 +28,14 @@ public class Move : MonoBehaviour
     //Attached Collision Data Check script
     CollisionDataCheck _collisionDataCheck;
     Jump _jump;
+    SlopeCheck _slopeCheck;
 
     //max speed change during the frame, if any
     float maxSpeedChange;
     //Current acceleration, if any
     float acceleration;
     //If the object is currently grounded (Used for checking what acceleration is used, friction to apply (if applicable), etc.
-    bool onGround;
+    public bool onGround;
     [SerializeField] float _prevXScale = 1;
     [SerializeField] int _xDirect;
     [SerializeField] bool _facingRight = true;
@@ -46,6 +47,7 @@ public class Move : MonoBehaviour
         ground = GetComponent<GroundCheck>();
         _collisionDataCheck = GetComponent<CollisionDataCheck>();
         _jump = GetComponent<Jump>();
+        _slopeCheck = GetComponent<SlopeCheck>();
     }
 
     private void Update()
@@ -62,7 +64,9 @@ public class Move : MonoBehaviour
         if (direction.x != 0) {
             _prevXScale = direction.x; 
         }
+        
         direction.x = input.GetMoveInput(xDirection);
+
 
         if(direction.x == 1)
         {
@@ -104,8 +108,16 @@ public class Move : MonoBehaviour
         maxSpeedChange = acceleration * Time.deltaTime;
         velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
 
+        if (_slopeCheck != null && _slopeCheck._onSlope)
+        {
+            rb2d.velocity = new Vector2(maxSpeed * _slopeCheck._slopeNormalPerp.x * -input.GetMoveInput(xDirection), maxSpeed * _slopeCheck._slopeNormalPerp.y * -input.GetMoveInput(xDirection));
+        }
+        else
+        {
+            rb2d.velocity = velocity;
+        }
 
-        rb2d.velocity = velocity;
+        
         
     }
 
@@ -139,6 +151,11 @@ public class Move : MonoBehaviour
         maxSpeedChange = acceleration * Time.deltaTime;
         float newX = Mathf.MoveTowards(currentX, desiredVelocity.x, maxSpeedChange);
         velocity += xAxis * (newX - currentX);
+    }
+
+    public float GetMoveInput()
+    {
+        return direction.x;
     }
 
     public void SetXDirection(float direction)

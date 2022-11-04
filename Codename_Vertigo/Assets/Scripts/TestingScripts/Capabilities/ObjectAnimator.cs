@@ -40,6 +40,8 @@ public class ObjectAnimator : MonoBehaviour
     public void AnimateObject()
     {
 
+        //Debug.Log(_collisionDataCheck._contactNormal.y);
+
         if(input.GetMoveInput() != 0)
         {
             animator.SetBool("isRunning", true);
@@ -58,12 +60,14 @@ public class ObjectAnimator : MonoBehaviour
             }
             else
             {
+                
                 animator.SetBool("isFalling", true);
                 animator.SetBool("isJumping", false);
             }
         }
         else
         {
+            
             animator.SetBool("isFalling", false);
         }
 

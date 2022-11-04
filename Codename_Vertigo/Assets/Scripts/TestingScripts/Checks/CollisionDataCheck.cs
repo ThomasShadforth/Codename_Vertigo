@@ -35,6 +35,7 @@ public class CollisionDataCheck : MonoBehaviour
     private void Update()
     {
         
+        
     }
 
     private void OnValidate()
@@ -52,6 +53,7 @@ public class CollisionDataCheck : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        
         EvaluateCollision(other);
         RetrieveFriction(other);
     }
@@ -68,15 +70,15 @@ public class CollisionDataCheck : MonoBehaviour
         for(int i = 0; i < collision.contactCount; i++)
         {
             _contactNormal = collision.GetContact(i).normal;
-            _onGround |= _contactNormal.y >= minGroundDotProd;
-
-            
-
+            _onGround |= _contactNormal.y >= .7f; //minGroundDotProd;
             _onWall = Mathf.Abs(_contactNormal.x) >= .9f && collision.gameObject.layer == LayerMask.NameToLayer("WallClimbObj");
         }
     }
 
-    
+    public bool GetGrounded()
+    {
+        return _onGround;
+    }
 
     void RetrieveFriction(Collision2D collision)
     {

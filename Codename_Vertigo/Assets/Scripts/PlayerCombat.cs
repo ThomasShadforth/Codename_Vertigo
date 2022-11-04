@@ -38,6 +38,11 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    public void SetAttack()
+    {
+        willAttack = true;
+    }
+
     private void FixedUpdate()
     {
         if (willAttack)
@@ -95,6 +100,9 @@ public class PlayerCombat : MonoBehaviour
             {
                 enAi.Damage(20, transform);
             }
+
+            ReworkedBaseAI reworkedEnemy = enemy.gameObject.GetComponent<ReworkedBaseAI>();
+            reworkedEnemy.Damage(20, transform);
         }
 
         //Add functionality for attack destructible objects
@@ -113,6 +121,12 @@ public class PlayerCombat : MonoBehaviour
         if (other.GetComponent<EnemyAI>())
         {
             EnemyAI AI = other.GetComponent<EnemyAI>();
+            AI.Damage(20, transform);
+        }
+
+        if (other.GetComponent<ReworkedBaseAI>())
+        {
+            ReworkedBaseAI AI = other.GetComponent<ReworkedBaseAI>();
             AI.Damage(20, transform);
         }
     }
