@@ -31,6 +31,11 @@ public class Dialogue_Manager : MonoBehaviour
     Story currentStory;
 
     public bool dialogueIsPlaying { get; private set; }
+    public float normalTypeSpeed;
+    public float fastTypeSpeed;
+    float _typeSpeed;
+
+    public float _currTextCount { get; private set; }
 
     private const string speaker_TAG = "speaker";
     private const string potrait_TAG = "portrait";
@@ -44,7 +49,7 @@ public class Dialogue_Manager : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -60,6 +65,11 @@ public class Dialogue_Manager : MonoBehaviour
 
     }
 
+    public void SetDialogueSpeed()
+    {
+        _typeSpeed = fastTypeSpeed;
+    }
+
     public void StartDialogue(TextAsset inkJSON, string inkFlow)
     {
         currentStory = new Story(inkJSON.text);
@@ -70,9 +80,9 @@ public class Dialogue_Manager : MonoBehaviour
 
         if(inkFlow != "")
         {
-            Debug.Log(currentStory.currentFlowName);
+            
             currentStory.ChoosePathString(inkFlow);
-            Debug.Log(currentStory.currentFlowName);
+            
         }
 
         speakerPanel.gameObject.SetActive(false);
@@ -151,6 +161,7 @@ public class Dialogue_Manager : MonoBehaviour
         yield return new WaitForSeconds(.2f);
         dialogueIsPlaying = false;
         dialogueText.text = "";
+        _typeSpeed = normalTypeSpeed;
 
 
         //Set the panel to false after animation
@@ -160,15 +171,21 @@ public class Dialogue_Manager : MonoBehaviour
 
     IEnumerator TypeDialogueCo(string textToPrint)
     {
+        _typeSpeed = normalTypeSpeed;
         dialogueText.text = "";
         char[] dialogueChars = textToPrint.ToCharArray();
+        _currTextCount = dialogueChars.Length;
+
         for(int i = 0; i < dialogueChars.Length; i++)
         {
             dialogueText.text += dialogueChars[i];
 
             dmAudioSource.Play();
 
-            yield return new WaitForSeconds(.05f);
+
+            _currTextCount--;
+            Debug.Log(_currTextCount);
+            yield return new WaitForSeconds(_typeSpeed);
         }
     }
 
@@ -195,7 +212,8 @@ public class Dialogue_Manager : MonoBehaviour
             if(i <= currentChoices.Count - 1)
             {
                 choices[i].SetActive(true);
-                choicesTexts[i].text = "Choice" + (i + 1);
+                choicesTexts[i].text = currentChoices[i].text;
+                //choicesTexts[i].text = "Choice" + (i + 1);
             }
             else
             {

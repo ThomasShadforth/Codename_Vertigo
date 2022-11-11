@@ -61,6 +61,7 @@ public class PlayerAnimator : MonoBehaviour
             if (_pc._onWall)
             {
                 _animator.SetBool("isWallSliding", true);
+                _animator.SetBool("isJumping", false);
             }
             else
             {
@@ -70,6 +71,7 @@ public class PlayerAnimator : MonoBehaviour
         else
         {
             _animator.SetBool("isFalling", false);
+            _animator.SetBool("isJumping", false);
         }
     }
 }

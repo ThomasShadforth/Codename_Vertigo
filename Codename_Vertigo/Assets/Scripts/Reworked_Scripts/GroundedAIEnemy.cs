@@ -35,8 +35,13 @@ public class GroundedAIEnemy : ReworkedBaseAI
             MaintainHeight(hit);
         }
 
-        if (_waiting)
+        if (_waiting || isKnocked || _isAttacking || Dialogue_Manager.instance.dialogueIsPlaying)
         {
+            if (!isKnocked)
+            {
+                _rb2d.velocity = Vector2.zero;
+            }
+
             return;
         }
 
@@ -64,8 +69,13 @@ public class GroundedAIEnemy : ReworkedBaseAI
 
     protected override void CheckState()
     {
-        if (_waiting)
+        if (_waiting || isKnocked || _isAttacking || Dialogue_Manager.instance.dialogueIsPlaying)
         {
+            if (!isKnocked)
+            {
+                _rb2d.velocity = Vector2.zero;
+            }
+
             return;
         }
 
@@ -168,6 +178,8 @@ public class GroundedAIEnemy : ReworkedBaseAI
             if (!_isAttacking)
             {
                 _isAttacking = true;
+                _rb2d.velocity = Vector2.zero;
+                _velocity = Vector2.zero;
                 _animator.Play("Attack");
             }
         }

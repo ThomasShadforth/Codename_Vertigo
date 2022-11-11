@@ -20,18 +20,33 @@ public class Dialogue_Trigger : MonoBehaviour
 
     bool playerInRange;
 
+    private void Update()
+    {
+        if (playerInRange)
+        {
+            if (!Dialogue_Manager.instance.dialogueIsPlaying)
+            {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    TriggerDialogue();
+                    visualCue.SetActive(false);
+                }
+            }
+        }
+    }
+
     private void FixedUpdate()
     {
         if(visualCue != null)
         {
+            visualCue.transform.localScale = new Vector3(1, 1, 1);
             if (playerInRange)
             {
-                visualCue.SetActive(true);
-                //Check for player input here, trigger dialogue if it isn't currently playing
                 if (!Dialogue_Manager.instance.dialogueIsPlaying)
                 {
-
+                    visualCue.SetActive(true);
                 }
+                //Check for player input here, trigger dialogue if it isn't currently playing
                 
             }
             else
@@ -39,6 +54,8 @@ public class Dialogue_Trigger : MonoBehaviour
                 visualCue.SetActive(false);
             }
         }
+
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -76,7 +93,11 @@ public class Dialogue_Trigger : MonoBehaviour
         }
         else
         {
-
+            if(inkJSON != null)
+            {
+                Debug.Log("STARTING");
+                Dialogue_Manager.instance.StartDialogue(inkJSON, inkFlow);
+            }
         }
     }
 }

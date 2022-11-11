@@ -6,7 +6,14 @@ public class DialogueUI : MonoBehaviour
 {
     public void Continue()
     {
-        Dialogue_Manager.instance.ContinueDialogue();
+        if (Dialogue_Manager.instance._currTextCount > 0)
+        {
+            Dialogue_Manager.instance.SetDialogueSpeed();
+        }
+        else
+        {
+            Dialogue_Manager.instance.ContinueDialogue();
+        }
     }
 
     public void SelectChoice(int choiceIndex)

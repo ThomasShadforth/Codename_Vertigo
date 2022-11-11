@@ -13,6 +13,7 @@ public class PlayerCombat : MonoBehaviour
 
     bool canAttack = true;
     bool willAttack;
+    public bool _isAttacking { get; private set; }
 
     [SerializeField] Transform spearPoint;
     [SerializeField] float spearPointRadius;
@@ -56,6 +57,8 @@ public class PlayerCombat : MonoBehaviour
     {
         if (canAttack)
         {
+            Debug.Log("ATTACKING");
+            _isAttacking = true;
             //ownerPlayer.isAttacking = true;
             canAttack = false;
             //Add a check to see if the player is grounded (For ground/air attacks)
@@ -69,6 +72,10 @@ public class PlayerCombat : MonoBehaviour
             {
                 
             }
+        }
+        else
+        {
+            Debug.Log("CANNOT ATTACK YET");
         }
     }
 
@@ -112,6 +119,7 @@ public class PlayerCombat : MonoBehaviour
     {
         //ownerPlayer.isAttacking = false;
         canAttack = true;
+        _isAttacking = false;
         animator.Play("IDLE");
         currentAttackNum = 1;
     }

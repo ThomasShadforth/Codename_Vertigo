@@ -53,7 +53,8 @@ public class CheckpointManager : MonoBehaviour
                     currentCheckpoint = null;
                     GameObject levelStart = GameObject.FindGameObjectWithTag("LevelStart");
                     currentCheckpointPos = levelStart.transform.position;
-                    FindObjectOfType<PlayerController>().transform.position = currentCheckpointPos;
+                    //FindObjectOfType<PlayerController>().transform.position = currentCheckpointPos;
+                    GameObject.FindGameObjectWithTag("Player").transform.position = currentCheckpointPos;
                     currentScene = SceneManager.GetActiveScene().name;
                 }
                 else
@@ -68,7 +69,8 @@ public class CheckpointManager : MonoBehaviour
                             if (levelGates[i].levelName == levelGateName)
                             {
                                 currentCheckpointPos = levelGates[i].gameObject.transform.position;
-                                FindObjectOfType<PlayerController>().transform.position = currentCheckpointPos;
+                                //FindObjectOfType<PlayerController>().transform.position = currentCheckpointPos;
+                                GameObject.FindGameObjectWithTag("Player").transform.position = currentCheckpointPos;
                             }
                         }
                     }
@@ -76,7 +78,8 @@ public class CheckpointManager : MonoBehaviour
                     {
                         GameObject levelHubStart = GameObject.FindGameObjectWithTag("LevelStart");
                         currentCheckpointPos = levelHubStart.transform.position;
-                        FindObjectOfType<PlayerController>().transform.position = currentCheckpointPos;
+                        //FindObjectOfType<PlayerController>().transform.position = currentCheckpointPos;
+                        GameObject.FindGameObjectWithTag("Player").transform.position = currentCheckpointPos;
                     }
 
                     currentScene = SceneManager.GetActiveScene().name;

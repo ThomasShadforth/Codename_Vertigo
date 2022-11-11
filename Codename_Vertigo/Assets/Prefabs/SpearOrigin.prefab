@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1139687866567645000}
   - component: {fileID: 1139687866567645001}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TestSpearNormRigidody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 8250075920087175367}
   - component: {fileID: 1820765990297284716}
   - component: {fileID: 9098432615651919059}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SpearOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}

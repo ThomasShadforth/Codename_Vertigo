@@ -59,6 +59,8 @@ MonoBehaviour:
   - {fileID: 0}
   dmAudioSource: {fileID: 5728747410794835195}
   dialogueSFX: []
+  normalTypeSpeed: 0.05
+  fastTypeSpeed: 0.02
 --- !u!82 &5728747410794835195
 AudioSource:
   m_ObjectHideFlags: 0

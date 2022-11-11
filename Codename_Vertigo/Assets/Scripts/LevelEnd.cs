@@ -24,5 +24,10 @@ public class LevelEnd : MonoBehaviour
             //Set the game to loading the next scene. Prevent the player from moving
             GameManager.instance.LoadLevel(nextLevel);
         }
+
+        if (other.CompareTag("Player"))
+        {
+            GameManager.instance.LoadLevel(nextLevel);
+        }
     }
 }

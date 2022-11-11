@@ -29,6 +29,15 @@ public class LevelCheckpoint : MonoBehaviour, IDataPersistence
                 DataPersistenceManager.instance.SaveGame();
             }
         }
+
+        if (other.CompareTag("Player"))
+        {
+            if (!isCurrentCheckpoint)
+            {
+                CheckpointManager.instance.SetCurrentCheckpoint(this);
+                DataPersistenceManager.instance.SaveGame();
+            }
+        }
     }
 
     public void SaveData(GameData data)

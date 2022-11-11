@@ -25,15 +25,18 @@ public class LevelGate : MonoBehaviour, IDataPersistence
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (playerNearPortal)
         {
-            if (!isUnlocked)
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                animator.SetBool("isOpen", true);
-            }
-            else
-            {
-                GameManager.instance.LoadLevel(levelName);
+                if (!isUnlocked)
+                {
+                    animator.SetBool("isOpen", true);
+                }
+                else
+                {
+                    GameManager.instance.LoadLevel(levelName);
+                }
             }
         }
     }

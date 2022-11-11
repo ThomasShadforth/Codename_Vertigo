@@ -57,6 +57,10 @@ public class ReworkedBaseAI : MonoBehaviour, IDamageInterface
     [SerializeField] protected HealthBar _healthBar;
     public int enemyMaxHP;
 
+    [Header("Knockback Values:")]
+    public Vector2 knockForce;
+    public float knockTimer;
+
     //Other toggles:
     [Header("Toggles")]
     public EnemyAIFSM currentState;
@@ -121,8 +125,8 @@ public class ReworkedBaseAI : MonoBehaviour, IDamageInterface
 
     protected virtual void HealthSystem_OnHealhChanged(object sender, System.EventArgs e)
     {
-        Debug.Log(_healthSystem.GetHealth());
-        //_healthBar.SetHealthFill(_healthSystem.GetHealthPercent());
+        //Debug.Log(_healthSystem.GetHealth());
+        _healthBar.SetHealthFill(_healthSystem.GetHealthPercent());
 
         if (_healthSystem.CheckIsDead())
         {
@@ -133,6 +137,33 @@ public class ReworkedBaseAI : MonoBehaviour, IDamageInterface
     public virtual void Damage(float damage, Transform attackerPos)
     {
         _healthSystem.Damage((int)damage);
+        Vector2 knockDir = transform.position - attackerPos.position;
+        knockDir = knockDir.normalized;
+        knockDir.y = .3f;
+        _animator.Play("Hit");
+        StartCoroutine(KnockbackCo(knockDir));
+    }
+
+    protected IEnumerator KnockbackCo(Vector2 knockDir)
+    {
+        float knockCounter = knockTimer;
+
+        while(knockCounter > 0)
+        {
+            if (!isKnocked)
+            {
+                isKnocked = true;
+                _isAttacking = false;
+                _isJumping = false;
+                _rb2d.velocity = new Vector2(knockDir.x * knockForce.x, knockDir.y * knockForce.y);
+            }
+
+            knockCounter -= Time.deltaTime;
+
+            yield return null;
+        }
+
+        isKnocked = false;
     }
 
     public virtual void CheckForHealth()

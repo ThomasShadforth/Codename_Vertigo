@@ -29,15 +29,12 @@ public class MovingPlatform : MonoBehaviour
 
     private void FixedUpdate()
     {
-        /*if (waiting || Dialogue_Manager.instance.dialogueIsPlaying || GameManager.instance.isPaused)
-        {
-            return;
-        }*/
-
-        if (waiting)
+        if (waiting || Dialogue_Manager.instance.dialogueIsPlaying || GameManager.instance.isPaused)
         {
             return;
         }
+
+        
 
         
 
@@ -77,6 +74,7 @@ public class MovingPlatform : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            
             if (target == null)
             {
                 target = other.gameObject;

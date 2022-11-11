@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
+public class ReworkedPlayerController : MonoBehaviour, IDamageInterface, IDataPersistence
 {
     Rigidbody2D _rb2d;
     Vector2 gravForce;
@@ -14,6 +14,8 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
     float _moveInput;
     bool _desiredJump;
     bool _isJumping;
+    bool _isKnocked;
+    bool _isAttacking;
     public int _xDirect;
 
     [Header("Config Values:")]
@@ -21,6 +23,7 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
 
     [Header("Health:")]
     [SerializeField] int _playerMaxHealth;
+    [SerializeField] HealthBar _healthBar;
 
     [Header("Movement:")]
     [SerializeField] float _maxSpeed = 4f;
@@ -55,6 +58,15 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
     [SerializeField] Vector2 _wallBounce;
     [SerializeField] Vector2 _wallLeap;
     [SerializeField] LayerMask _wallCheckLayer;
+
+    [Header("Knockback Values:")]
+    public Vector2 knockForce;
+    public float knockTimer;
+
+    [Header("Particle Effects:")]
+    [SerializeField] ParticleSystem _jumpEffect;
+    [SerializeField] ParticleSystem _wallEffect;
+
     public bool _onWall { get; private set; }
     bool _wallJumping;
 
@@ -68,20 +80,36 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
         _healthSystem.OnHealthChanged += HealthSystem_OnHealthChanged;
         _combat = GetComponent<PlayerCombat>();
         gravForce = Physics2D.gravity * _rb2d.mass;
+
+        Debug.Log(_rideHeight * 1.3);
     }
 
     private void Update()
     {
-        
-        _desiredJump |= Input.GetButtonDown("Jump");
-
-        if (Input.GetButtonDown("Fire1"))
+        if (!Dialogue_Manager.instance.dialogueIsPlaying)
         {
-            if(_combat != null)
+            if (Input.GetButtonDown("Fire1"))
             {
-                _combat.SetAttack();
+                if (_combat != null)
+                {
+                    _combat.SetAttack();
+                }
             }
         }
+
+        if (_isKnocked || _combat._isAttacking || Dialogue_Manager.instance.dialogueIsPlaying)
+        {
+            if (!_isKnocked)
+            {
+                _rb2d.velocity = Vector2.zero;
+            }
+
+            return;
+        }
+
+        _desiredJump |= Input.GetButtonDown("Jump");
+
+        
 
         _desiredVelocity = new Vector2(_moveInput, 0) * Mathf.Max(_maxSpeed, 0);
 
@@ -89,15 +117,55 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
 
     private void FixedUpdate()
     {
-        _velocity = _rb2d.velocity;
         (bool rayHitGround, RaycastHit2D hit) = RaycastToGround();
 
-        if(_moveInput != 0  && !_wallJumping)
+        grounded = CheckGrounded(rayHitGround, hit);
+
+        //Debug.Log(grounded);
+
+        if (grounded)
+        {
+            //Determine whether to add the check for landing sfx
+        }
+        else
+        {
+
+        }
+
+        if (rayHitGround && _shouldMaintainHeight)
+        {
+            MaintainHeight(hit);
+        }
+
+        if (_isKnocked || _combat._isAttacking || Dialogue_Manager.instance.dialogueIsPlaying)
+        {
+            if (!_isKnocked)
+            {
+                _rb2d.velocity = Vector2.zero;
+            }
+
+            return;
+        }
+
+        _velocity = _rb2d.velocity;
+
+        if (_moveInput != 0  && !_wallJumping)
         {
             _prevMoveInput = _moveInput;
         }
 
-        _moveInput = Input.GetAxisRaw("Horizontal");
+        if(Input.GetAxisRaw("Horizontal") > 0)
+        {
+            _moveInput = 1f;
+        } else if(Input.GetAxisRaw("Horizontal") < 0)
+        {
+            _moveInput = -1f;
+        }
+        else
+        {
+            _moveInput = 0f;
+        }
+        //_moveInput = Input.GetAxisRaw("Horizontal");
 
         if (_moveInput != _prevMoveInput && _moveInput != 0)
         {
@@ -115,29 +183,11 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
             }
         }
 
-
-
         //Debug.Log(rayHitGround);
-
-        grounded = CheckGrounded(rayHitGround, hit);
-
-        if (grounded)
-        {
-            //Determine whether to add the check for landing sfx
-        }
-        else
-        {
-
-        }
 
         PlayerMove();
         PlayerWallCheck();
         PlayerJump();
-
-        if(rayHitGround && _shouldMaintainHeight)
-        {
-            MaintainHeight(hit);
-        }
 
         _rb2d.velocity = _velocity;
 
@@ -147,7 +197,6 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
 
     void PlayerMove()
     {
-        
         _maxSpeedChange = _acceleration * Time.deltaTime;
         _velocity.x = Mathf.MoveTowards(_velocity.x, _desiredVelocity.x, _maxSpeedChange);
     }
@@ -162,6 +211,8 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
         {
             _coyoteCounter = _coyoteTime;
             _isJumping = false;
+            
+            
         }
         else
         {
@@ -186,14 +237,16 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
         if(Input.GetButton("Jump") && _velocity.y > 0)
         {
             _rb2d.gravityScale = _jumpGravity;
+            _shouldMaintainHeight = false;
         }
 
-        if(!Input.GetButton("Jump") || _velocity.y < 0)
+        if(!Input.GetButton("Jump") || (_velocity.y < 0 && !grounded))
         {
             _rb2d.gravityScale = _fallGravity;
+            _shouldMaintainHeight = true;
         }
 
-        if(_velocity.y == 0 && grounded)
+        if(grounded)
         {
             _rb2d.gravityScale = 1f;
         }
@@ -208,6 +261,8 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
             
             _coyoteCounter = 0f;
             float jumpSpeed = Mathf.Sqrt(-2 * Physics2D.gravity.y * _jumpHeight);
+
+            _jumpEffect.Play();
 
             _isJumping = true;
 
@@ -238,6 +293,11 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
 
         if (_onWall)
         {
+            if (!_wallEffect.isPlaying)
+            {
+                _wallEffect.Play();
+            }
+
             float dir = wallHit.normal.x;
             dir = Mathf.RoundToInt(dir);
             
@@ -268,6 +328,9 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
                     //Wall Leap
                 }
 
+                _jumpEffect.Play();
+                _wallEffect.Stop();
+
                 _onWall = false;
                 SwitchXScale();
                 _facingRight = !_facingRight;
@@ -284,13 +347,20 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
 
     bool CheckGrounded(bool rayHitGround, RaycastHit2D rayHit)
     {
+        
         bool grounded;
         if (rayHitGround)
         {
-            grounded = rayHit.distance < _rideHeight * 1.3f;
+            if(rayHit.distance > _rideHeight * 1.7f)
+            {
+                //Debug.Log(rayHit.distance);
+            }
+            grounded = rayHit.distance < _rideHeight * 1.7f;
+            
         }
         else
         {
+            //Debug.Log("NO HIT");
             grounded = false;
         }
 
@@ -303,6 +373,7 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
         
         bool rayHitGround = Physics2D.Raycast(transform.position, Vector2.down, _rayToGroundLength, _whatIsGround);
         Debug.DrawRay(transform.position, Vector2.down * _rayToGroundLength, Color.red);
+        
         return (rayHitGround, hit);
     }
 
@@ -343,7 +414,12 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
 
     void HealthSystem_OnHealthChanged(object sender, System.EventArgs e)
     {
+        Debug.Log(_healthSystem.GetHealth());
 
+        if (_healthBar != null)
+        {
+            _healthBar.SetHealthFill(_healthSystem.GetHealthPercent());
+        }
     }
 
     public void Damage(float damage, Transform attackPos)
@@ -351,12 +427,52 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface
         //Deal damage, apply knockback
         _healthSystem.Damage((int)damage);
 
+        Vector2 knockDir = transform.position - attackPos.position;
+        knockDir = knockDir.normalized;
+        knockDir.y = .3f;
+        GetComponent<Animator>().Play("Player_Hit");
+        StartCoroutine(KnockbackCo(knockDir));
+
         //Apply the knockback
+    }
+
+    IEnumerator KnockbackCo(Vector2 knockDir)
+    {
+        float knockCounter = knockTimer;
+
+        while(knockCounter > 0)
+        {
+            if (!_isKnocked)
+            {
+                _isKnocked = true;
+                _isAttacking = false;
+                _rb2d.velocity = new Vector2(knockDir.x * knockForce.x, knockDir.y * knockForce.y);
+            }
+
+            knockCounter -= Time.deltaTime;
+            yield return null;
+        }
+
+        _isKnocked = false;
     }
 
     public void CheckForHealth()
     {
 
+    }
+
+    #endregion
+
+    #region Data Management
+
+    public void SaveData(GameData data)
+    {
+        data.playerPosition = CheckpointManager.instance.currentCheckpointPos;
+    }
+
+    public void LoadData(GameData data)
+    {
+        transform.position = data.playerPosition;
     }
 
     #endregion
