@@ -70,6 +70,8 @@ public class PlayerAnimator : MonoBehaviour
         }
         else
         {
+            Debug.Log("GROUNDED");
+
             _animator.SetBool("isFalling", false);
             _animator.SetBool("isJumping", false);
         }

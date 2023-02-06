@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotatingPlatform : MonoBehaviour
+public class RotatingPlatform : Platform
 {
     [SerializeField] Transform _rotationPivot;
     [SerializeField] float _rotationSpeed;
     [SerializeField] Vector3 _rotationAxis;
 
-    GameObject _target;
+    [SerializeField] GameObject _target;
+
+    [SerializeField] Vector3 _offset;
 
     // Start is called before the first frame update
     void Start()
@@ -29,26 +31,37 @@ public class RotatingPlatform : MonoBehaviour
         transform.eulerAngles = Vector3.zero;
     }
 
+    private void FixedUpdate()
+    {
+        
+    }
 
     private void OnCollisionStay2D(Collision2D other)
     {
+        /*
         if (other.gameObject.CompareTag("Player"))
         {
-            if (_target == null)
-            {
-                _target = other.gameObject;
-                _target.transform.parent = transform;
-            }
-        }
+            
+            _target = other.gameObject;
+            //_target.transform.parent = transform;
+
+            _offset = _target.transform.position - transform.position;
+        }*/
     }
 
     private void OnCollisionExit2D(Collision2D other)
     {
+        /*
         if (other.gameObject.CompareTag("Player"))
         {
             _target.transform.parent = null;
             _target = null;
-        }
+        } */
+    }
+
+    private void LateUpdate()
+    {
+        
     }
 
 }

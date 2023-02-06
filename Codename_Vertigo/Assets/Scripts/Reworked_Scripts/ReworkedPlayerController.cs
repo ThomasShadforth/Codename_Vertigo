@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -118,6 +119,8 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface, IDataPe
     private void FixedUpdate()
     {
         (bool rayHitGround, RaycastHit2D hit) = RaycastToGround();
+        SetPlatform(hit);
+
 
         grounded = CheckGrounded(rayHitGround, hit);
 
@@ -192,6 +195,10 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface, IDataPe
         _rb2d.velocity = _velocity;
 
     }
+
+    
+
+
 
     #region Movement
 
@@ -377,6 +384,18 @@ public class ReworkedPlayerController : MonoBehaviour, IDamageInterface, IDataPe
         return (rayHitGround, hit);
     }
 
+    private void SetPlatform(RaycastHit2D hit)
+    {
+        try
+        {
+            Platform platParent = hit.collider.gameObject.GetComponent<Platform>();
+            transform.parent = platParent.transform;
+        }
+        catch
+        {
+            transform.parent = null;
+        }
+    }
     #endregion
 
     #region Height Maintenance

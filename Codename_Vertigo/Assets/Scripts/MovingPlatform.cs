@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingPlatform : MonoBehaviour
+public class MovingPlatform : Platform
 {
     public Vector2 moveVelocity;
     public Vector2 startPosition;
@@ -33,9 +33,6 @@ public class MovingPlatform : MonoBehaviour
         {
             return;
         }
-
-        
-
         
 
         transform.position += (Vector3)moveVelocity * Time.deltaTime;
@@ -72,6 +69,7 @@ public class MovingPlatform : MonoBehaviour
     }
     private void OnCollisionStay2D(Collision2D other)
     {
+        /*
         if (other.gameObject.CompareTag("Player"))
         {
             
@@ -81,15 +79,16 @@ public class MovingPlatform : MonoBehaviour
                 target.transform.parent = transform;
                 //offset = target.GetComponent<Rigidbody2D>().velocity - _rb2d.velocity;
             }
-        }
+        }*/
     }
 
     private void OnCollisionExit2D(Collision2D other)
     {
+        /*
         if (other.gameObject.CompareTag("Player"))
         {
             target.transform.parent = null;
             target = null;
-        }
+        }*/
     }
 }
